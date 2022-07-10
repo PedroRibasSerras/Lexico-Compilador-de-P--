@@ -30,7 +30,7 @@ int main()
 
     // carry the pointer to the file beginer
     fseek(arquivo, 0, SEEK_SET);
-    RetornoLexical token;
+    RetornoLexical *token;
     if(getc(arquivo) == EOF){
         printf("Arquivo vazio! Compilado com sucesso.");
         
@@ -38,7 +38,7 @@ int main()
     else{
         fseek(arquivo, -1, SEEK_CUR);
 
-        token = analiseLexical(arquivo, TT, TE, TSR, saida, contadorLinha);
+        *token = analiseLexical(arquivo, TT, TE, TSR, saida, contadorLinha);
         programa(saida, contadorLinha, token);
         
         if(getc(arquivo) != EOF){
@@ -46,7 +46,7 @@ int main()
             fputc(inicioErroMsg, saida);
             // fputs(token.token, saida);
             // fputs(", ", saida);
-            fputs(token.classe, saida);
+            fputs(token->classe, saida);
             fputc('\n', saida);
         }
 

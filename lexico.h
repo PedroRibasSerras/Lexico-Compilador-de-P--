@@ -7,6 +7,7 @@ typedef struct
     int final;
     int retrocede;
     char *mensagem;
+    int erro;
 } Estado;
 
 typedef struct
@@ -18,6 +19,6 @@ typedef struct
 int **criaTabelaTransicao();
 Estado *criaTabelaDeEstados();
 char **criaTabelaSimbolosReservados();
-RetornoLexical analiseLexical(FILE *, int **, Estado *, char **);
+RetornoLexical analiseLexical(FILE *, int **, Estado *, char **,FILE *,int *);
 
 #endif

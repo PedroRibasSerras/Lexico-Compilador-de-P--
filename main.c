@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "lexico.h"
+#include "sintatico.h"
 
 int main()
 {
@@ -25,20 +26,30 @@ int main()
     int **TT = criaTabelaTransicao();
     Estado *TE = criaTabelaDeEstados();
     char **TSR = criaTabelaSimbolosReservados();
+    int *contadorLinha = 1;
 
     // carry the pointer to the file beginer
     fseek(arquivo, 0, SEEK_SET);
     RetornoLexical token;
-    while (getc(arquivo) != EOF)
-    {
+    if(getc(arquivo) == EOF){
+        printf("Arquivo vazio! Compilado com sucesso.");
+        
+    }
+    else{
         fseek(arquivo, -1, SEEK_CUR);
 
-        token = analiseLexical(arquivo, TT, TE, TSR);
+        token = analiseLexical(arquivo, TT, TE, TSR, saida, contadorLinha);
+        programa(saida, contadorLinha, token);
+        
+        if(getc(arquivo) != EOF){
+            sprintf(inicioErroMsg, "Erro sintatico na linha %d: ", contadorLinha);
+            fputc(inicioErroMsg, saida);
+            // fputs(token.token, saida);
+            // fputs(", ", saida);
+            fputs(token.classe, saida);
+            fputc('\n', saida);
+        }
 
-        fputs(token.token, saida);
-        fputs(", ", saida);
-        fputs(token.classe, saida);
-        fputc('\n', saida);
     }
     fclose(saida);
     fclose(arquivo);

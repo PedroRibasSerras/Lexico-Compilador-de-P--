@@ -1,5 +1,5 @@
 all:
-gcc main.c lexico.c -o lexico.exe
+gcc main.c lexico.c sintatico.c -o compilador.exe
 
 run:
-./lexico.exe
+./compilador.exe

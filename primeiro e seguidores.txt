@@ -1,0 +1,69 @@
+---------primeiros-----------
+    programa = { program }
+    corpo = primeiro(dc) = { const, var, procedure, begin }
+    dc = primeiro(dc_c) + primeiro(dc_v) + primeiro(dc_p) = { const, var, procedure, _ }
+    dc_c = { const, _ }
+    dc_v = {var, _ }
+    dc_p = { procedure, _}
+    tipo_var = { real, inteiro }
+    variaveis = { identificador }
+    mais_var = { ',', _ }
+    parametros = { (, _ }
+    lista_par = { identificador }
+    mais_par = { ;, _ }
+    corpo_p = { var, begin }
+    dc_loc = { var,_ }
+    lista_arg = { (, _ }
+    argumentos = { identificador }
+    mais_ident = { ;, _ }
+    pfalsa = { else, _ }
+    comandos = primeiros(cmd) + { _ } = { read, write, while, if, identificador, begin, for, _ }
+    cmd = { read, write, while, if, identificador, begin, for }
+    condicao = primeiro(expressao) = { +,-, identificador, numero_int, numero_real, ( }
+    relacao = { =,<>, >=, <=, >, < }
+    expressao = primeiro(termo) = { +,-, identificador, numero_int, numero_real, ( }
+    op_un = { +,-,_ }
+    outros_termos = primeiros(op_ad) + { _ } = { +, -, _ }
+    op_ad = { +, - }
+    termo = primeiros(op_un) + primeiros(fator) = { +,-, identificador, numero_int, numero_real, ( }
+    mais_fatores = primeiro(op_mul) + { _ } = { *, /, _ }
+    op_mul = { *, / }
+    fator = { identificador } + primeiro(numero)+ { ( }  =  { identificador, numero_int, numero_real, ( }
+    numero = { numero_int, numero_real }
+
+--------- seguidores -----------
+    programa = { _ }
+    corpo = { . }
+    dc = { begin }
+    dc_c = primeiros(dc_v), primeiros(dc_p), seguidores(dc) =  { var, procedure, begin }
+    dc_v = primeiros(dc_p), seguidores(dc) =  primeiros(dc_p), begin = { procedure, begin }
+    dc_p = seguidores(dc) = { begin }
+    tipo_var = ;, primeiros(mais_par), seguidores(lista_par) = { ;, ) }
+    variaveis = :, seguidores(mais_var), ) = { :, ) }
+    mais_var = seguidores(variaveis) = { :, ) }
+    parametros = { ; }
+    lista_par = ), seguidores(mais_par) = { ) }
+    mais_par = seguidores(lista_par) = { ) }
+    corpo_p =  primeiro(dc_p),seguidores(dc_p) = { procedure, begin }
+    dc_loc = { begin }
+    lista_arg = seguidores(cmd) = { ;, else }
+    argumentos = ), seguidores(mais_ident) = { ) }
+    mais_ident = seguidores(argumentos) = { ) }
+    pfalsa = seguidores(cmd) = { ;, else }
+    comandos = { end }
+    cmd = seguidores(pfalsa) + { ; } + primeiros(pfalsa) = { ;, else }
+    condicao = { ), then }
+    relacao = primeiros(expressao) = { +, -, identificador, numero_int, numero_real, ( }
+    expressao = seguidores(cmd), primeiros(relacao), seguidores(condicao), ) = { ;, else, = , <>, >=, <=, >, <, ), then }
+    op_un = primeiros(fator) = { identificador, numero_int, numero_real, ( }
+    outros_termos = seguidores(expressao) = { ;, else, =, <>, >=, <=, >, <, ), then }
+    op_ad = primeiros(termo) = { +, -, identificador, numero_int, numero_real, ( }
+    termo = primeiros(outros_termos),seguidores(outros_termos), seguidores(expressao) = { +, -, ;, else, =, <>, >=, <=, >, <, ), then }
+    mais_fatores = seguidores(termo) = { +, -, ;, else, =, <>, >=, <=, >, <, ), then }
+    op_mul = primeiros(fator) = { identificador, numero_int, numero_real, ( }
+    fator = primeiros(mais_fatores), seguidores(termo),seguidores(mais_fatores) = { *, /, +, -, ;, else, =, <>, >=, <=, >, <, ), then }
+    numero = ;, seguidores(fator) = { *, /, +, -, ;, else, =, <>, >=, <=, >, <, ), then }
+
+
+
+

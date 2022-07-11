@@ -51,8 +51,12 @@ int main()
             fputs(inicioErroMsg, saida);
             // fputs(token.token, saida);
             // fputs(", ", saida);
-            fputs(token->classe, saida);
+            fputs("programa não finalizado corretamente", saida);
             fputc('\n', saida);
+        }
+        else
+        {
+            fputs("Programa compilado com sucesso!", saida);
         }
     }
     fclose(saida);

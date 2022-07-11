@@ -2,12 +2,23 @@
 #define SINTATICO_H
 #include <stdio.h>
 
-void erro(char *);
-void programa();
-void corpo();
-void dc();
-void dc_c();
-void dc_v();
+typedef struct
+{
+    char **v;
+    int n;
+    int p;
+} Conjunto;
+
+Conjunto juntaConjuntos(Conjunto, Conjunto);
+Conjunto criaConjunto(int);
+void addStr(Conjunto, char *);
+void printErro(char *);
+int erro(char *, Conjunto);
+void programa(Conjunto);
+void corpo(Conjunto);
+void dc(Conjunto);
+int dc_c();
+int dc_v();
 void tipo_var();
 void vaiaveis();
 void mais_var();
@@ -21,7 +32,7 @@ void lista_arg();
 void argumentos();
 void mais_ident();
 void pfalsa();
-void comandos();
+void comandos(Conjunto S);
 void cmd();
 void condicao();
 void relacao();

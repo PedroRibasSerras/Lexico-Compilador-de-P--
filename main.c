@@ -42,7 +42,8 @@ int main()
         token = (RetornoLexical *)malloc(1 * sizeof(RetornoLexical));
 
         *token = analiseLexical();
-        programa(token);
+
+        programa(criaConjunto(0));
 
         if (getc(arquivo) != EOF)
         {

@@ -2,23 +2,18 @@
 
 Conjunto *juntaConjuntos(Conjunto *c1, Conjunto *c2)
 {
-    printf("Junta 1 ");
     Conjunto *novoConjunto = (Conjunto *)malloc((1) * sizeof(Conjunto));
-    printf("2 ");
     novoConjunto->v = (char **)malloc((c1->n + c2->n) * sizeof(char *));
-    printf("3 ");
     for (int i = 0; i <= c1->p; i++)
     {
         novoConjunto->v[i] = (char *)malloc((strlen(c1->v[i]) + 1) * sizeof(char)); // era sizeof(c1->v[i]), mas estava dando errado por algum motivo maluco
         strcpy(novoConjunto->v[i], c1->v[i]);
     }
-    printf("4 ");
     for (int i = 0; i <= c2->p; i++)
     {
         novoConjunto->v[c1->p + 1 + i] = (char *)malloc((strlen(c2->v[i]) + 1) * sizeof(char)); // era sizeof(c1->v[i]), mas estava dando errado por algum motivo maluco
         strcpy(novoConjunto->v[c1->p + 1 + i], c2->v[i]);
     }
-    printf("5 \n");
     novoConjunto->n = c1->n + c2->n;
     novoConjunto->p = c1->p + c2->p + 1;
 
@@ -35,15 +30,10 @@ void printaConjunto(Conjunto *c)
 
 Conjunto *criaConjunto(int n)
 {
-    printf("Cria 1 ");
     Conjunto *c = (Conjunto *)malloc((1) * sizeof(Conjunto));
-    printf("2 ");
     c->v = (char **)malloc((n) * sizeof(char *));
-    printf("3 ");
     c->n = n;
-    printf("4 ");
     c->p = -1;
-    printf("5\n");
     return c;
 }
 
@@ -59,14 +49,9 @@ void freeConjunto(Conjunto *c)
 
 void addStr(Conjunto *c, char *str)
 {
-    printf("Add 1 ");
     c->p = c->p + 1;
-    printf("2 ");
     c->v[c->p] = (char *)malloc((strlen(str) + 1) * sizeof(char));
-    printf("3 ");
-    printf(" p = %d n = %d str = %s\n", c->p, c->n, str);
     strcpy(c->v[c->p], str);
-    printf("4 \n");
 }
 
 void initPrimeirosESeguidores()

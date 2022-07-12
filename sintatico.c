@@ -18,6 +18,7 @@ int erro(char *erroMsg, Conjunto *cd, Conjunto *cp) // 0 - seguidor direto, 1 - 
 {
     if (erroMsg[0] != '\0')
     {
+        flagErro = 1;
         printErro(erroMsg);
     }
 

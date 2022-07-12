@@ -26,6 +26,7 @@ int main()
     TT = criaTabelaTransicao();
     TE = criaTabelaDeEstados();
     TSR = criaTabelaSimbolosReservados();
+    flagErro = 0;
 
     char inicioErroMsg[100];
 
@@ -58,7 +59,8 @@ int main()
         }
         else
         {
-            fputs("Programa compilado com sucesso!", saida);
+            if (!flagErro)
+                fputs("Programa compilado com sucesso!", saida);
         }
     }
     fclose(saida);

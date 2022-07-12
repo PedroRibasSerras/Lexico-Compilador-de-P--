@@ -38,4 +38,6 @@ void op_mul(Conjunto *);
 void fator(Conjunto *);
 void numero(Conjunto *);
 
+int flagErro;
+
 #endif

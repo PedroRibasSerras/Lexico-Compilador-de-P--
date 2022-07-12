@@ -15,9 +15,7 @@ Conjunto *juntaConjuntos(Conjunto *c1, Conjunto *c2)
     }
     for (int i = 0; i <= c2->p; i++)
     {
-        printf("%d", sizeof(c2->v[i]));
         novoConjunto->v[c1->p + 1 + i] = (char *)malloc(strlen(c2->v[i]) + 1); // era sizeof(c1->v[i]), mas estava dando errado por algum motivo maluco
-        // printf("%s", c2->v[i]);
         strcpy(novoConjunto->v[c1->p + 1 + i], c2->v[i]);
     }
     novoConjunto->n = c1->n + c2->n;
@@ -198,8 +196,6 @@ void dc(Conjunto *S)
     addStr(seguidorDcc, "procedure");
     // addStr(seguidorDcc, "begin"); não é necessário pq já existe no S
 
-    printaConjunto(seguidorDcc);
-    printaConjunto(S);
     dc_c(juntaConjuntos(seguidorDcc, S));
 
     Conjunto *seguidorDcv = criaConjunto(1);
@@ -445,7 +441,7 @@ void mais_var(Conjunto *S)
         }
     }
 
-    // Como mais_variaveis só existe dentro de variaveis, não é apenas necessário passar os seguidores dos pais que já incluem.
+    // Como mais_variaveis só existe dentro de variaveis, é apenas necessário passar os seguidores dos pais que já incluem os de variaveis.
     variaveis(S);
 }
 void dc_p(Conjunto *S)
@@ -564,10 +560,73 @@ void parametros(Conjunto *S)
     }
 }
 
-void lista_par(Conjunto *S) {}
+void lista_par(Conjunto *S)
+{
+
+    Conjunto *seguidorVariaveis = criaConjunto(2);
+    addStr(seguidorVariaveis, "simb_dois_pontos");
+    addStr(seguidorVariaveis, "simb_fecha_parenteses");
+    // addStr(seguidorDcc, "begin"); não é necessário pq já existe no S
+
+    variaveis(juntaConjuntos(seguidorVariaveis, S));
+
+    if (strcmp(token->classe, "simb_dois_pontos") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(2); // primeiros tipo_var
+        addStr(proximo, "integer");
+        addStr(proximo, "real");
+
+        if (!erro("Token \":\" esperado.", proximo))
+            if (erro("", S))
+            {
+                return;
+            }
+    }
+
+    Conjunto *seguidorTipo_var = criaConjunto(2);
+    addStr(seguidorTipo_var, "simb_dois_pontos");
+    addStr(seguidorTipo_var, "simb_fecha_parenteses");
+
+    tipo_var(juntaConjuntos(seguidorTipo_var, S));
+
+    Conjunto *seguidorMais_par = criaConjunto(1);
+    addStr(seguidorMais_par, "simb_fecha_parenteses");
+
+    mais_par(juntaConjuntos(seguidorMais_par, S));
+}
 
 void mais_par(Conjunto *S)
 {
+    //; <lista_par> | λ
+    if (strcmp(token->classe, "simb_ponto_virgula") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(2); // primeiro de lista_par
+        addStr(proximo, "identificador");
+        addStr(proximo, "identificador mal formado");
+
+        if (!erro("", proximo))
+        { //"Token \"=\" esperado."
+            if (erro("", S))
+            {
+                return;
+            }
+        }
+        else
+        {
+            printErro("Token \";\" esperado.");
+        }
+    }
+
+    // Como mais_par só existe dentro de lista_par, é apenas necessário passar os seguidores dos pais que já incluem o de lista_par.
+    lista_par(S);
 }
 
 void corpo_p(Conjunto *S) {}

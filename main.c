@@ -2,14 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "lexico.h"
+#include "sintatico.h"
 
 int main()
 {
     // Open the "meu_programa" file
-    FILE *arquivo, *saida;
     arquivo = fopen("meu_programa.txt", "rt");
     saida = fopen("saida.txt", "w");
-
     // test if the file opened
     if (arquivo == NULL)
     {
@@ -22,26 +21,54 @@ int main()
         return 0;
     }
 
-    int **TT = criaTabelaTransicao();
-    Estado *TE = criaTabelaDeEstados();
-    char **TSR = criaTabelaSimbolosReservados();
+    contadorLinha = (int *)malloc(1 * sizeof(int));
+    *contadorLinha = 1;
+    TT = criaTabelaTransicao();
+    TE = criaTabelaDeEstados();
+    TSR = criaTabelaSimbolosReservados();
+    flagErro = 0;
+
+    char inicioErroMsg[100];
 
     // carry the pointer to the file beginer
     fseek(arquivo, 0, SEEK_SET);
-    RetornoLexical token;
-    while (getc(arquivo) != EOF)
+    if (getc(arquivo) == EOF)
     {
+        printf("Arquivo vazio! Compilado com sucesso.");
+    }
+    else
+    {
+        initPrimeirosESeguidores();
+
         fseek(arquivo, -1, SEEK_CUR);
 
-        token = analiseLexical(arquivo, TT, TE, TSR);
+        token = (RetornoLexical *)malloc(1 * sizeof(RetornoLexical));
 
-        fputs(token.token, saida);
-        fputs(", ", saida);
-        fputs(token.classe, saida);
-        fputc('\n', saida);
+        *token = analiseLexical();
+
+        programa(criaConjunto(0));
+
+        char final = getc(arquivo);
+        while (final == '\n' || final == '\t' || final == ' ')
+            final = getc(arquivo);
+        if (final != EOF)
+        {
+            sprintf(inicioErroMsg, "Erro sintatico na linha %d: ", *contadorLinha);
+            fputs(inicioErroMsg, saida);
+            // fputs(token.token, saida);
+            // fputs(", ", saida);
+            fputs("programa não finalizado corretamente", saida);
+            fputc('\n', saida);
+        }
+        else
+        {
+            if (!flagErro)
+                fputs("Programa compilado com sucesso!", saida);
+        }
     }
     fclose(saida);
     fclose(arquivo);
+    freePrimeirosESeguidores();
 
     for (int i = 0; i < 0; i++)
     {

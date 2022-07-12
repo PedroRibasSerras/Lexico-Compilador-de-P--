@@ -122,13 +122,14 @@ int **criaTabelaTransicao()
     return tabelaDeTrasicao;
 }
 
-Estado criaEstado(int final, int retrocede, char *msg)
+Estado criaEstado(int final, int retrocede, char *msg, int erro)
 {
     Estado e;
     e.final = final;
     e.retrocede = retrocede;
     e.mensagem = (char *)malloc(50 * sizeof(char));
     strcpy(e.mensagem, msg);
+    e.erro = erro;
 
     return e;
 }
@@ -138,41 +139,41 @@ Estado *criaTabelaDeEstados()
     int numEstados = 35;
     Estado *tabelaDeEstados = (Estado *)malloc(numEstados * sizeof(Estado));
 
-    tabelaDeEstados[0] = criaEstado(0, 0, "");
-    tabelaDeEstados[1] = criaEstado(1, 0, "simb_ponto");
-    tabelaDeEstados[2] = criaEstado(1, 0, "simb_ponto_virgula");
-    tabelaDeEstados[3] = criaEstado(1, 0, "sim_divider");
-    tabelaDeEstados[4] = criaEstado(1, 0, "simb_abre_parenteses");
-    tabelaDeEstados[5] = criaEstado(1, 0, "simb_igual");
-    tabelaDeEstados[6] = criaEstado(1, 0, "simb_mult");
-    tabelaDeEstados[7] = criaEstado(0, 0, "");
-    tabelaDeEstados[8] = criaEstado(1, 0, "simb_atrib");
-    tabelaDeEstados[9] = criaEstado(1, 1, "simb_dois_pontos");
-    tabelaDeEstados[10] = criaEstado(1, 0, "simb_virgula");
-    tabelaDeEstados[11] = criaEstado(1, 0, "simb_mais");
-    tabelaDeEstados[12] = criaEstado(1, 0, "simb_menos");
-    tabelaDeEstados[13] = criaEstado(0, 0, "");
-    tabelaDeEstados[14] = criaEstado(1, 0, "simb_maior_igual");
-    tabelaDeEstados[15] = criaEstado(1, 1, "simb_maior");
-    tabelaDeEstados[16] = criaEstado(0, 0, "");
-    tabelaDeEstados[17] = criaEstado(1, 1, "simb_menor");
-    tabelaDeEstados[18] = criaEstado(1, 0, "simb_menor_igual");
-    tabelaDeEstados[19] = criaEstado(1, 0, "simb_dif");
-    tabelaDeEstados[20] = criaEstado(0, 0, "");
-    tabelaDeEstados[21] = criaEstado(1, 0, "comentario");
-    tabelaDeEstados[22] = criaEstado(0, 0, "");
-    tabelaDeEstados[23] = criaEstado(1, 1, "identificador"); // deve ser tratado a parte
-    tabelaDeEstados[24] = criaEstado(0, 0, "");
-    tabelaDeEstados[25] = criaEstado(1, 1, "n_inteiro");
-    tabelaDeEstados[26] = criaEstado(0, 0, "");
-    tabelaDeEstados[27] = criaEstado(1, 1, "Erro: Nao e aceito um real sem a parte decimal");
-    tabelaDeEstados[28] = criaEstado(0, 0, "");
-    tabelaDeEstados[29] = criaEstado(1, 1, "n_real");
-    tabelaDeEstados[30] = criaEstado(1, 0, "simb_fecha_parenteses");
-    tabelaDeEstados[31] = criaEstado(1, 1, "Erro: comentario deve ser de linha unica");
-    tabelaDeEstados[32] = criaEstado(1, 0, "Erro: identificador mal formado");
-    tabelaDeEstados[33] = criaEstado(1, 0, "Erro: numero mal formado");
-    tabelaDeEstados[34] = criaEstado(1, 0, "Erro: real mal formado");
+    tabelaDeEstados[0] = criaEstado(0, 0, "", 0);
+    tabelaDeEstados[1] = criaEstado(1, 0, "simb_ponto", 0);
+    tabelaDeEstados[2] = criaEstado(1, 0, "simb_ponto_virgula", 0);
+    tabelaDeEstados[3] = criaEstado(1, 0, "sim_divider", 0);
+    tabelaDeEstados[4] = criaEstado(1, 0, "simb_abre_parenteses", 0);
+    tabelaDeEstados[5] = criaEstado(1, 0, "simb_igual", 0);
+    tabelaDeEstados[6] = criaEstado(1, 0, "simb_mult", 0);
+    tabelaDeEstados[7] = criaEstado(0, 0, "", 0);
+    tabelaDeEstados[8] = criaEstado(1, 0, "simb_atrib", 0);
+    tabelaDeEstados[9] = criaEstado(1, 1, "simb_dois_pontos", 0);
+    tabelaDeEstados[10] = criaEstado(1, 0, "simb_virgula", 0);
+    tabelaDeEstados[11] = criaEstado(1, 0, "simb_mais", 0);
+    tabelaDeEstados[12] = criaEstado(1, 0, "simb_menos", 0);
+    tabelaDeEstados[13] = criaEstado(0, 0, "", 0);
+    tabelaDeEstados[14] = criaEstado(1, 0, "simb_maior_igual", 0);
+    tabelaDeEstados[15] = criaEstado(1, 1, "simb_maior", 0);
+    tabelaDeEstados[16] = criaEstado(0, 0, "", 0);
+    tabelaDeEstados[17] = criaEstado(1, 1, "simb_menor", 0);
+    tabelaDeEstados[18] = criaEstado(1, 0, "simb_menor_igual", 0);
+    tabelaDeEstados[19] = criaEstado(1, 0, "simb_dif", 0);
+    tabelaDeEstados[20] = criaEstado(0, 0, "", 0);
+    tabelaDeEstados[21] = criaEstado(1, 0, "comentario", 0);
+    tabelaDeEstados[22] = criaEstado(0, 0, "", 0);
+    tabelaDeEstados[23] = criaEstado(1, 1, "identificador", 0); // deve ser tratado a parte
+    tabelaDeEstados[24] = criaEstado(0, 0, "", 0);
+    tabelaDeEstados[25] = criaEstado(1, 1, "n_inteiro", 0);
+    tabelaDeEstados[26] = criaEstado(0, 0, "", 0);
+    tabelaDeEstados[27] = criaEstado(1, 1, "Nao e aceito um real sem a parte decimal", 1); // Erro
+    tabelaDeEstados[28] = criaEstado(0, 0, "", 0);
+    tabelaDeEstados[29] = criaEstado(1, 1, "n_real", 0);
+    tabelaDeEstados[30] = criaEstado(1, 0, "simb_fecha_parenteses", 0);
+    tabelaDeEstados[31] = criaEstado(1, 1, "comentario deve ser de linha unica", 1); // Erro
+    tabelaDeEstados[32] = criaEstado(1, 0, "identificador mal formado", 1);          // Erro
+    tabelaDeEstados[33] = criaEstado(1, 0, "numero mal formado", 1);                 // Erro
+    tabelaDeEstados[34] = criaEstado(1, 0, "real mal formado", 1);                   // Erro
 
     // Cria um vetor com todos os estados, marcando os finais com final = 1;
     // se tiver que retroceder retrocede = 1;
@@ -224,19 +225,27 @@ int eReservado(char *s, char **TSR)
     return 0;
 }
 
-RetornoLexical analiseLexical(FILE *f, int **TT, Estado *TE, char **TSR)
+RetornoLexical analiseLexical()
 {
+    char inicioErroMsg[50];
     int it = 0;
     int si = 0;
     RetornoLexical result;
     result.classe = (char *)malloc(50 * sizeof(char));
     result.token = (char *)malloc(50 * sizeof(char));
 
-    char simb = getc(f);
+    char simb = getc(arquivo);
 
     while (simb != EOF)
     {
         si = TT[si][(int)simb];
+
+        // caso a analise tenha encontrado o comentario, ele deve ser ignorado e o proximo tolken deve ser enviado
+        if (si == 21)
+        {
+            return analiseLexical();
+        }
+
         if (si == -1)
         {
 
@@ -245,6 +254,16 @@ RetornoLexical analiseLexical(FILE *f, int **TT, Estado *TE, char **TSR)
                 result.token[it] = simb;
                 result.token[it + 1] = '\0';
                 strcpy(result.classe, "Caractere invalido");
+
+                if (TE[si].erro)
+                {
+                    sprintf(inicioErroMsg, "Erro lexico na linha %d:", *contadorLinha);
+                    fputs(inicioErroMsg, saida);
+                    // fputs(result.token, saida);
+                    // fputs(", ", saida);
+                    fputs(result.classe, saida);
+                    fputc('\n', saida);
+                }
                 return result;
             }
             si = 0;
@@ -254,7 +273,7 @@ RetornoLexical analiseLexical(FILE *f, int **TT, Estado *TE, char **TSR)
             strcpy(result.classe, TE[si].mensagem);
             if (TE[si].retrocede)
             {
-                fseek(f, -1, SEEK_CUR);
+                fseek(arquivo, -1, SEEK_CUR);
                 result.token[it] = '\0';
                 if (eReservado(result.token, TSR))
                 {
@@ -264,6 +283,17 @@ RetornoLexical analiseLexical(FILE *f, int **TT, Estado *TE, char **TSR)
             }
             result.token[it] = simb;
             result.token[it + 1] = '\0';
+
+            if (TE[si].erro)
+            {
+                sprintf(inicioErroMsg, "Erro lexico na linha %d:", *contadorLinha);
+                fputs(inicioErroMsg, saida);
+                // fputs(result.token, saida);
+                // fputs(", ", saida);
+                fputs(result.classe, saida);
+                fputc('\n', saida);
+            }
+
             return result;
         }
 
@@ -272,7 +302,9 @@ RetornoLexical analiseLexical(FILE *f, int **TT, Estado *TE, char **TSR)
             result.token[it] = simb;
             it++;
         }
-        simb = getc(f);
+        if (simb == '\n')
+            *contadorLinha = *contadorLinha + 1;
+        simb = getc(arquivo);
     }
     if (it > 0)
     {
@@ -288,14 +320,43 @@ RetornoLexical analiseLexical(FILE *f, int **TT, Estado *TE, char **TSR)
                 {
                     strcpy(result.classe, result.token);
                 }
+
+                if (TE[si].erro)
+                {
+                    sprintf(inicioErroMsg, "Erro lexico na linha %d:", *contadorLinha);
+                    fputs(inicioErroMsg, saida);
+                    // fputs(result.token, saida);
+                    // fputs(", ", saida);
+                    fputs(result.classe, saida);
+                    fputc('\n', saida);
+                }
+
                 return result;
             }
             result.token[it] = simb;
             result.token[it + 1] = '\0';
+
+            if (TE[si].erro)
+            {
+                sprintf(inicioErroMsg, "Erro lexico na linha %d:", *contadorLinha);
+                fputs(inicioErroMsg, saida);
+                // fputs(result.token, saida);
+                // fputs(", ", saida);
+                fputs(result.classe, saida);
+                fputc('\n', saida);
+            }
+
             return result;
         }
     }
-    strcpy(result.classe, "Erro: estado final nao reconhecido");
+    strcpy(result.classe, "estado final nao reconhecido");
+
+    sprintf(inicioErroMsg, "Erro lexico na linha %d:", *contadorLinha);
+    fputs(inicioErroMsg, saida);
+    // fputs(result.token, saida);
+    // fputs(", ", saida);
+    fputs(result.classe, saida);
+    fputc('\n', saida);
 
     return result;
 }

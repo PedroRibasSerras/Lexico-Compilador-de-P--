@@ -238,9 +238,6 @@ RetornoLexical analiseLexical()
 
     while (simb != EOF)
     {
-        if (simb == '\n')
-            *contadorLinha = *contadorLinha + 1;
-
         si = TT[si][(int)simb];
 
         // caso a analise tenha encontrado o comentario, ele deve ser ignorado e o proximo tolken deve ser enviado
@@ -305,6 +302,8 @@ RetornoLexical analiseLexical()
             result.token[it] = simb;
             it++;
         }
+        if (simb == '\n')
+            *contadorLinha = *contadorLinha + 1;
         simb = getc(arquivo);
     }
     if (it > 0)

@@ -89,7 +89,7 @@ void programa(Conjunto *S)
         addStr(proximo, "identficador");
         addStr(proximo, "identificador mal formado");
 
-        if (!erro("Token \"program\" esperado.", proximo))
+        if (!erro("Token \"program\" esperado.@1", proximo))
             if (erro("", S))
             {
                 return;
@@ -105,7 +105,7 @@ void programa(Conjunto *S)
         Conjunto *proximo = criaConjunto(1);
         addStr(proximo, ";");
 
-        if (!erro("Identificador de programa esperado.", proximo))
+        if (!erro("Identificador de programa esperado.@2", proximo))
             if (erro("", S))
             {
                 return;
@@ -123,7 +123,7 @@ void programa(Conjunto *S)
         addStr(proximo, "var");
         addStr(proximo, "procedure");
 
-        if (!erro("Token ; esperado.", proximo))
+        if (!erro("Token ; esperado.@3", proximo))
             if (erro("", S))
             {
                 return;
@@ -141,7 +141,7 @@ void programa(Conjunto *S)
     }
     else
     {
-        printErro("Ponto (.) esperado no final do codigo.");
+        printErro("Ponto (.) esperado no final do codigo.@4");
         return;
     }
 }
@@ -166,7 +166,7 @@ void corpo(Conjunto *S)
         addStr(proximo, "begin");
         addStr(proximo, "for");
 
-        if (!erro("Token \"begin\" esperado.", proximo))
+        if (!erro("Token \"begin\" esperado.@5", proximo))
             if (erro("", S))
             {
                 return;
@@ -184,7 +184,7 @@ void corpo(Conjunto *S)
     }
     else
     {
-        erro("Token \"end\" esperado.", S);
+        erro("Token \"end\" esperado.@6", S);
     }
 }
 
@@ -228,7 +228,7 @@ void dc_c(Conjunto *S)
         }
         else
         {
-            printErro("Token \"const\" esperado.");
+            printErro("Token \"const\" esperado.@7");
         }
     }
 
@@ -241,7 +241,7 @@ void dc_c(Conjunto *S)
         Conjunto *proximo = criaConjunto(1);
         addStr(proximo, "simb_igual");
 
-        if (!erro("Identificador esperado.", proximo)) //"Token \"=\" esperado."
+        if (!erro("Identificador esperado.@8", proximo)) //"Token \"=\" esperado."
             if (erro("", S))
             {
                 return;
@@ -258,7 +258,7 @@ void dc_c(Conjunto *S)
         addStr(proximo, "n_inteiro");
         addStr(proximo, "n_real");
 
-        if (!erro("Token \"=\" esperado.", proximo))
+        if (!erro("Token \"=\" esperado.@9", proximo))
             if (erro("", S))
             {
                 return;
@@ -292,7 +292,7 @@ void dc_c(Conjunto *S)
         Conjunto *proximo = criaConjunto(1);
         addStr(proximo, "const");
 
-        if (!erro("Token \";\" esperado.", proximo))
+        if (!erro("Token \";\" esperado.@10", proximo))
             if (erro("", S))
             {
                 return;
@@ -323,7 +323,7 @@ void dc_v(Conjunto *S)
         }
         else
         {
-            printErro("Token \"var\" esperado.");
+            printErro("Token \"var\" esperado.@11");
         }
     }
 
@@ -344,7 +344,7 @@ void dc_v(Conjunto *S)
         addStr(proximo, "integer");
         addStr(proximo, "real");
 
-        if (!erro("Token \":\" esperado.", proximo))
+        if (!erro("Token \":\" esperado.@12", proximo))
             if (erro("", S))
             {
                 return;
@@ -366,7 +366,7 @@ void dc_v(Conjunto *S)
         Conjunto *proximo = criaConjunto(1);
         addStr(proximo, "var");
 
-        if (!erro("Token \";\" esperado.", proximo))
+        if (!erro("Token \";\" esperado.@13", proximo))
             if (erro("", S))
             {
                 return;
@@ -384,7 +384,7 @@ void tipo_var(Conjunto *S)
     else
     {
 
-        if (erro("Tipo da variável esperado.", S))
+        if (erro("Tipo da variável esperado.@14", S))
         {
             return;
         }
@@ -402,7 +402,7 @@ void variaveis(Conjunto *S)
         Conjunto *proximo = criaConjunto(1);
         addStr(proximo, "simb_virgula");
 
-        if (!erro("Identificador esperado.", proximo)) //"Token \"=\" esperado."
+        if (!erro("Identificador esperado.@15", proximo)) //"Token \"=\" esperado."
             if (erro("", S))
             {
                 return;
@@ -437,7 +437,7 @@ void mais_var(Conjunto *S)
         }
         else
         {
-            printErro("Token \",\" esperado.");
+            printErro("Token \",\" esperado.@16");
         }
     }
 
@@ -465,7 +465,7 @@ void dc_p(Conjunto *S)
         }
         else
         {
-            printErro("Token \"procedure\" esperado.");
+            printErro("Token \"procedure\" esperado.@17");
         }
     }
 
@@ -479,7 +479,7 @@ void dc_p(Conjunto *S)
         addStr(proximo, "simb_abre_parenteses");
         // addStr(proximo, "simb_ponto_virgula");
 
-        if (!erro("Identificador esperado.", proximo)) //"Token \"=\" esperado."
+        if (!erro("Identificador esperado.@18", proximo)) //"Token \"=\" esperado."
             if (erro("", S))
             {
                 return;
@@ -501,7 +501,7 @@ void dc_p(Conjunto *S)
         addStr(proximo, "var");
         addStr(proximo, "begin");
 
-        if (!erro("Token \";\" esperado.", proximo))
+        if (!erro("Token \";\" esperado.@19", proximo))
             if (erro("", S))
             {
                 return;
@@ -538,7 +538,7 @@ void parametros(Conjunto *S)
         }
         else
         {
-            printErro("Token \"(\" esperado.");
+            printErro("Token \"(\" esperado.@20");
         }
     }
 
@@ -553,7 +553,7 @@ void parametros(Conjunto *S)
     }
     else
     {
-        if (erro("Token \")\" esperado.", S))
+        if (erro("Token \")\" esperado.@21", S))
         {
             return;
         }
@@ -580,7 +580,7 @@ void lista_par(Conjunto *S)
         addStr(proximo, "integer");
         addStr(proximo, "real");
 
-        if (!erro("Token \":\" esperado.", proximo))
+        if (!erro("Token \":\" esperado.@22", proximo))
             if (erro("", S))
             {
                 return;
@@ -621,7 +621,7 @@ void mais_par(Conjunto *S)
         }
         else
         {
-            printErro("Token \";\" esperado.");
+            printErro("Token \";\" esperado.@23");
         }
     }
 
@@ -629,9 +629,73 @@ void mais_par(Conjunto *S)
     lista_par(S);
 }
 
-void corpo_p(Conjunto *S) {}
+void corpo_p(Conjunto *S)
+{
+    //<dc_loc> begin <comandos> end ;
+    Conjunto *seguidorDc_loc = criaConjunto(1);
+    addStr(seguidorDc_loc, "begin");
 
-void dc_loc(Conjunto *S) {}
+    dc_loc(juntaConjuntos(seguidorDc_loc, S));
+
+    if (strcmp(token->classe, "begin") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(7);
+        addStr(proximo, "read");
+        addStr(proximo, "write");
+        addStr(proximo, "if");
+        addStr(proximo, "identificador"); // duas regras - deve ser tratado
+        addStr(proximo, "begin");
+        addStr(proximo, "for");
+
+        if (!erro("Token \"begin\" esperado.@24", proximo))
+            if (erro("", S))
+            {
+                return;
+            }
+    }
+
+    Conjunto *seguidorComandos = criaConjunto(1);
+    addStr(seguidorComandos, "end");
+
+    comandos(juntaConjuntos(seguidorComandos, S));
+
+    if (strcmp(token->classe, "end") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(1);
+        addStr(proximo, "simb_ponto_virgula");
+
+        if (!erro("Token \"end\" esperado.@25", proximo))
+            if (erro("", S))
+            {
+                return;
+            }
+    }
+
+    if (strcmp(token->classe, "simb_ponto_virgula") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        erro("Token \";\" esperado.@26", S);
+    }
+}
+
+void dc_loc(Conjunto *S)
+{
+    Conjunto *seguidorDcv = criaConjunto(1);
+    addStr(seguidorDcv, "procedure");
+
+    dc_v(juntaConjuntos(seguidorDcv, S));
+}
 
 void lista_arg(Conjunto *S) {}
 

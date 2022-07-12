@@ -1,3 +1,9 @@
 program du;
+var a: rel;
+var b: integer;
+procedure nomep(x: real);
+var a, c: integer;
+begin
+end;
 begin {programa principal}
 end.

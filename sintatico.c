@@ -14,8 +14,6 @@ void printErro(char *erroMsg)
     fputs(erroMsg, saida);
     fputc('\n', saida);
 }
-
-//---------------------------------------------
 int erro(char *erroMsg, Conjunto *cd, Conjunto *cp) // 0 - seguidor direto, 1 - seguidor do pai, 2- arquivo acabou
 {
     if (erroMsg[0] != '\0')
@@ -43,12 +41,10 @@ int erro(char *erroMsg, Conjunto *cd, Conjunto *cp) // 0 - seguidor direto, 1 - 
             }
         }
         *token = analiseLexical();
-        printf("%s\n", token->classe);
     }
 
     return 2;
 }
-
 int tokenExisteNoConjunto(Conjunto *c) // 0 - não exite, 1 - existe
 {
 
@@ -61,7 +57,6 @@ int tokenExisteNoConjunto(Conjunto *c) // 0 - não exite, 1 - existe
     }
     return 0;
 }
-
 void programa(Conjunto *S)
 {
     if (strcmp(token->classe, "program") == 0)
@@ -76,8 +71,10 @@ void programa(Conjunto *S)
 
         if (erro("Token \"program\" esperado.@1", proximo, S) == 1)
         {
+            freeConjunto(proximo);
             return;
         }
+        freeConjunto(proximo);
     }
 
     if (strcmp(token->classe, "identificador") == 0 || strcmp(token->classe, "identificador mal formado") == 0)
@@ -90,7 +87,11 @@ void programa(Conjunto *S)
         addStr(proximo, ";");
 
         if (erro("Identificador de programa esperado.@2", proximo, S) == 1)
+        {
+            freeConjunto(proximo);
             return;
+        }
+        freeConjunto(proximo);
     }
 
     if (strcmp(token->classe, "simb_ponto_virgula") == 0)
@@ -103,7 +104,9 @@ void programa(Conjunto *S)
             return;
     }
 
-    corpo(juntaConjuntos(scorpo, S));
+    Conjunto *juncao = juntaConjuntos(scorpo, S);
+    corpo(juncao);
+    freeConjunto(juncao);
 
     if (strcmp(token->classe, "simb_ponto") == 0)
     {
@@ -142,7 +145,6 @@ void corpo(Conjunto *S)
         erro("Token \"end\" esperado.@6", criaConjunto(0), S);
     }
 }
-
 void dc(Conjunto *S)
 {
     dc_c(juntaConjuntos(sdcc, S));
@@ -151,7 +153,6 @@ void dc(Conjunto *S)
 
     dc_p(juntaConjuntos(sdcp, S));
 }
-
 void dc_c(Conjunto *S)
 {
 
@@ -166,6 +167,8 @@ void dc_c(Conjunto *S)
         addStr(proximo, "identificador mal formado");
 
         int erroRes = erro("", proximo, S);
+        freeConjunto(proximo);
+
         if (erroRes == 1) // caso seja lambda não deve dar erro
         {
             return;
@@ -185,8 +188,12 @@ void dc_c(Conjunto *S)
         Conjunto *proximo = criaConjunto(1);
         addStr(proximo, "simb_igual");
 
-        if (erro("Identificador esperado.@8", proximo, S) == 1) //"Token \"=\" esperado."
+        if (erro("Identificador esperado.@8", proximo, S) == 1)
+        {
+            freeConjunto(proximo);
             return;
+        }
+        freeConjunto(proximo);
     }
 
     if (strcmp(token->classe, "simb_igual") == 0)
@@ -215,7 +222,6 @@ void dc_c(Conjunto *S)
 
     dc_c(juntaConjuntos(sdcc, S));
 }
-
 void dc_v(Conjunto *S)
 {
     if (strcmp(token->classe, "var") == 0)
@@ -264,7 +270,6 @@ void dc_v(Conjunto *S)
 
     dc_v(juntaConjuntos(sdcv, S));
 }
-
 void tipo_var(Conjunto *S)
 {
     if (strcmp(token->classe, "real") == 0 || strcmp(token->classe, "integer") == 0)
@@ -276,7 +281,6 @@ void tipo_var(Conjunto *S)
         erro("Tipo da variável esperado.@14", criaConjunto(0), S);
     }
 }
-
 void variaveis(Conjunto *S)
 {
     if (strcmp(token->classe, "identificador") == 0 || strcmp(token->classe, "identificador mal formado") == 0)
@@ -291,7 +295,6 @@ void variaveis(Conjunto *S)
 
     mais_var(juntaConjuntos(smaisvar, S));
 }
-
 void mais_var(Conjunto *S)
 {
     if (strcmp(token->classe, "simb_virgula") == 0)
@@ -327,6 +330,8 @@ void dc_p(Conjunto *S)
         addStr(proximo, "identificador mal formado");
 
         int erroRes = erro("", proximo, S);
+        freeConjunto(proximo);
+
         if (erroRes == 1) // caso seja lambda não deve dar erro
         {
             return;
@@ -363,7 +368,6 @@ void dc_p(Conjunto *S)
 
     dc_p(juntaConjuntos(sdcp, S));
 }
-
 void parametros(Conjunto *S)
 {
     if (strcmp(token->classe, "simb_abre_parenteses") == 0)
@@ -394,7 +398,6 @@ void parametros(Conjunto *S)
         erro("Token \")\" esperado.@21", criaConjunto(0), S);
     }
 }
-
 void lista_par(Conjunto *S)
 {
     variaveis(juntaConjuntos(svariaveis, S));
@@ -413,7 +416,6 @@ void lista_par(Conjunto *S)
 
     mais_par(juntaConjuntos(smaispar, S));
 }
-
 void mais_par(Conjunto *S)
 {
     if (strcmp(token->classe, "simb_ponto_virgula") == 0)
@@ -437,7 +439,6 @@ void mais_par(Conjunto *S)
     // Como mais_par só existe dentro de lista_par, é apenas necessário passar os seguidores dos pais que já incluem o de lista_par.
     lista_par(juntaConjuntos(slistapar, S));
 }
-
 void corpo_p(Conjunto *S)
 {
     dc_loc(juntaConjuntos(sdcloc, S));
@@ -464,7 +465,11 @@ void corpo_p(Conjunto *S)
         addStr(proximo, "simb_ponto_virgula");
 
         if (erro("Token \"end\" esperado.@25", proximo, S) == 1)
+        {
+            freeConjunto(proximo);
             return;
+        }
+        freeConjunto(proximo);
     }
 
     if (strcmp(token->classe, "simb_ponto_virgula") == 0)
@@ -476,12 +481,10 @@ void corpo_p(Conjunto *S)
         erro("Token \";\" esperado.@26", criaConjunto(0), S);
     }
 }
-
 void dc_loc(Conjunto *S)
 {
     dc_v(juntaConjuntos(sdcv, S));
 }
-
 void lista_arg(Conjunto *S)
 {
     if (strcmp(token->classe, "simb_abre_parenteses") == 0)
@@ -512,7 +515,6 @@ void lista_arg(Conjunto *S)
         erro("Token \")\" esperado.@28", criaConjunto(0), S);
     }
 }
-
 void argumentos(Conjunto *S)
 {
     if (strcmp(token->classe, "identificador") == 0 || strcmp(token->classe, "identificador mal formado") == 0)
@@ -527,7 +529,6 @@ void argumentos(Conjunto *S)
 
     mais_ident(juntaConjuntos(smaisident, S));
 }
-
 void mais_ident(Conjunto *S)
 {
     if (strcmp(token->classe, "simb_ponto_virgula") == 0)
@@ -551,7 +552,6 @@ void mais_ident(Conjunto *S)
     // Como mais_par só existe dentro de lista_par, é apenas necessário passar os seguidores dos pais que já incluem o de lista_par.
     argumentos(juntaConjuntos(sargumentos, S));
 }
-
 void pfalsa(Conjunto *S)
 {
     if (strcmp(token->classe, "else") == 0)
@@ -575,7 +575,6 @@ void pfalsa(Conjunto *S)
     // Como mais_par só existe dentro de lista_par, é apenas necessário passar os seguidores dos pais que já incluem o de lista_par.
     cmd(juntaConjuntos(scmd, S));
 }
-
 void comandos(Conjunto *S)
 {
     if (tokenExisteNoConjunto(pcmd) || !tokenExisteNoConjunto(S))
@@ -597,7 +596,6 @@ void comandos(Conjunto *S)
 }
 void cmd(Conjunto *S)
 {
-
     if (strcmp(token->classe, "read") == 0 || strcmp(token->classe, "write") == 0)
     {
         *token = analiseLexical();
@@ -649,7 +647,11 @@ void cmd(Conjunto *S)
             addStr(proximo, "do");
 
             if (erro("Token \")\" esperado.@36", proximo, S) == 1)
+            {
+                freeConjunto(proximo);
                 return;
+            }
+            freeConjunto(proximo);
         }
 
         if (strcmp(token->classe, "do") == 0)
@@ -733,8 +735,12 @@ void cmd(Conjunto *S)
             Conjunto *proximo = criaConjunto(1);
             addStr(proximo, "simb_atrib");
 
-            if (erro("Identificador esperado.@46", proximo, S) == 1) //"Token \"=\" esperado."
+            if (erro("Identificador esperado.@46", proximo, S) == 1)
+            {
+                freeConjunto(proximo);
                 return;
+            }
+            freeConjunto(proximo);
         }
 
         if (strcmp(token->classe, "simb_atrib") == 0)

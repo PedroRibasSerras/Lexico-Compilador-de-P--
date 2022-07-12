@@ -2,18 +2,23 @@
 
 Conjunto *juntaConjuntos(Conjunto *c1, Conjunto *c2)
 {
+    printf("Junta 1 ");
     Conjunto *novoConjunto = (Conjunto *)malloc((1) * sizeof(Conjunto));
+    printf("2 ");
     novoConjunto->v = (char **)malloc((c1->n + c2->n) * sizeof(char *));
+    printf("3 ");
     for (int i = 0; i <= c1->p; i++)
     {
-        novoConjunto->v[i] = (char *)malloc(strlen(c1->v[i]) + 1); // era sizeof(c1->v[i]), mas estava dando errado por algum motivo maluco
+        novoConjunto->v[i] = (char *)malloc((strlen(c1->v[i]) + 1) * sizeof(char)); // era sizeof(c1->v[i]), mas estava dando errado por algum motivo maluco
         strcpy(novoConjunto->v[i], c1->v[i]);
     }
+    printf("4 ");
     for (int i = 0; i <= c2->p; i++)
     {
-        novoConjunto->v[c1->p + 1 + i] = (char *)malloc(strlen(c2->v[i]) + 1); // era sizeof(c1->v[i]), mas estava dando errado por algum motivo maluco
+        novoConjunto->v[c1->p + 1 + i] = (char *)malloc((strlen(c2->v[i]) + 1) * sizeof(char)); // era sizeof(c1->v[i]), mas estava dando errado por algum motivo maluco
         strcpy(novoConjunto->v[c1->p + 1 + i], c2->v[i]);
     }
+    printf("5 \n");
     novoConjunto->n = c1->n + c2->n;
     novoConjunto->p = c1->p + c2->p + 1;
 
@@ -30,19 +35,38 @@ void printaConjunto(Conjunto *c)
 
 Conjunto *criaConjunto(int n)
 {
+    printf("Cria 1 ");
     Conjunto *c = (Conjunto *)malloc((1) * sizeof(Conjunto));
+    printf("2 ");
     c->v = (char **)malloc((n) * sizeof(char *));
+    printf("3 ");
     c->n = n;
+    printf("4 ");
     c->p = -1;
-
+    printf("5\n");
     return c;
+}
+
+void freeConjunto(Conjunto *c)
+{
+    for (int i = 0; i <= c->p; i++)
+    {
+        free(c->v[i]);
+    }
+    free(c->v);
+    free(c);
 }
 
 void addStr(Conjunto *c, char *str)
 {
+    printf("Add 1 ");
     c->p = c->p + 1;
-    c->v[c->p] = (char *)malloc(strlen(str) + 1);
+    printf("2 ");
+    c->v[c->p] = (char *)malloc((strlen(str) + 1) * sizeof(char));
+    printf("3 ");
+    printf(" p = %d n = %d str = %s\n", c->p, c->n, str);
     strcpy(c->v[c->p], str);
+    printf("4 \n");
 }
 
 void initPrimeirosESeguidores()
@@ -212,10 +236,10 @@ void initPrimeirosESeguidores()
 
     sprograma = criaConjunto(0);
 
-    scorpo = criaConjunto(3);
+    scorpo = criaConjunto(1);
     addStr(scorpo, "simb_ponto");
 
-    sdc = criaConjunto(3);
+    sdc = criaConjunto(1);
     addStr(sdc, "begin");
 
     sdcc = criaConjunto(3);
@@ -223,67 +247,67 @@ void initPrimeirosESeguidores()
     addStr(sdcc, "procedure");
     addStr(sdcc, "begin");
 
-    sdcv = criaConjunto(3);
+    sdcv = criaConjunto(2);
     addStr(sdcv, "procedure");
     addStr(sdcv, "begin");
 
-    sdcp = criaConjunto(3);
+    sdcp = criaConjunto(1);
     addStr(sdcp, "begin");
 
-    stipovar = criaConjunto(3);
+    stipovar = criaConjunto(2);
     addStr(stipovar, "simb_ponto_virgula");
     addStr(stipovar, "simb_fecha_parenteses");
 
-    svariaveis = criaConjunto(3);
+    svariaveis = criaConjunto(2);
     addStr(svariaveis, "simb_dois_pontos");
     addStr(svariaveis, "simb_fecha_parenteses");
 
-    smaisvar = criaConjunto(3);
+    smaisvar = criaConjunto(2);
     addStr(smaisvar, "simb_dois_pontos");
     addStr(smaisvar, "simb_fecha_parenteses");
 
-    sparametros = criaConjunto(3);
+    sparametros = criaConjunto(1);
     addStr(sparametros, "simb_ponto_virgula");
 
-    slistapar = criaConjunto(3);
+    slistapar = criaConjunto(1);
     addStr(slistapar, "simb_fecha_parenteses");
 
-    smaispar = criaConjunto(3);
+    smaispar = criaConjunto(1);
     addStr(smaispar, "simb_fecha_parenteses");
 
-    scorpop = criaConjunto(3);
+    scorpop = criaConjunto(2);
     addStr(scorpop, "procedure");
     addStr(scorpop, "begin");
 
-    sdcloc = criaConjunto(3);
+    sdcloc = criaConjunto(1);
     addStr(sdcloc, "begin");
 
-    slistaarg = criaConjunto(3);
+    slistaarg = criaConjunto(2);
     addStr(slistaarg, "simb_ponto_virgula");
     addStr(slistaarg, "else");
 
-    sargumentos = criaConjunto(3);
+    sargumentos = criaConjunto(1);
     addStr(sargumentos, "simb_fecha_parenteses");
 
-    smaisident = criaConjunto(3);
+    smaisident = criaConjunto(1);
     addStr(smaisident, "simb_fecha_parenteses");
 
-    spfalsa = criaConjunto(3);
+    spfalsa = criaConjunto(2);
     addStr(spfalsa, "simb_ponto_virgula");
     addStr(spfalsa, "else");
 
-    scomandos = criaConjunto(3);
+    scomandos = criaConjunto(1);
     addStr(scomandos, "end");
 
-    scmd = criaConjunto(3);
+    scmd = criaConjunto(2);
     addStr(scmd, "simb_ponto_virgula");
     addStr(scmd, "else");
 
-    scondicao = criaConjunto(3);
+    scondicao = criaConjunto(2);
     addStr(scondicao, "simb_fecha_parenteses");
     addStr(scondicao, "then");
 
-    srelacao = criaConjunto(3);
+    srelacao = criaConjunto(7);
     addStr(srelacao, "simb_mais");
     addStr(srelacao, "simb_menos");
 
@@ -294,7 +318,7 @@ void initPrimeirosESeguidores()
     addStr(srelacao, "n_inteiro");
     addStr(srelacao, "simb_abre_parenteses");
 
-    sexpressao = criaConjunto(3);
+    sexpressao = criaConjunto(10);
     addStr(sexpressao, "simb_ponto_virgula");
     addStr(sexpressao, "else");
     addStr(sexpressao, "simb_igual");
@@ -306,7 +330,7 @@ void initPrimeirosESeguidores()
     addStr(sexpressao, "simb_fecha_parenteses");
     addStr(sexpressao, "then");
 
-    sopun = criaConjunto(3);
+    sopun = criaConjunto(5);
     addStr(sopun, "identificador");
     addStr(sopun, "identificador mal formado");
 
@@ -314,7 +338,7 @@ void initPrimeirosESeguidores()
     addStr(sopun, "n_inteiro");
     addStr(sopun, "simb_abre_parenteses");
 
-    soutrostermos = criaConjunto(3);
+    soutrostermos = criaConjunto(10);
     addStr(soutrostermos, "simb_ponto_virgula");
     addStr(soutrostermos, "else");
     addStr(soutrostermos, "simb_igual");
@@ -326,7 +350,7 @@ void initPrimeirosESeguidores()
     addStr(soutrostermos, "simb_fecha_parenteses");
     addStr(soutrostermos, "then");
 
-    sopad = criaConjunto(3);
+    sopad = criaConjunto(7);
     addStr(sopad, "simb_mais");
     addStr(sopad, "simb_menos");
 
@@ -337,7 +361,7 @@ void initPrimeirosESeguidores()
     addStr(sopad, "n_inteiro");
     addStr(sopad, "simb_abre_parenteses");
 
-    stermo = criaConjunto(3);
+    stermo = criaConjunto(12);
     addStr(stermo, "simb_mais");
     addStr(stermo, "simb_menos");
     addStr(stermo, "simb_ponto_virgula");
@@ -351,7 +375,7 @@ void initPrimeirosESeguidores()
     addStr(stermo, "simb_fecha_parenteses");
     addStr(stermo, "then");
 
-    smaisfatores = criaConjunto(3);
+    smaisfatores = criaConjunto(12);
     addStr(smaisfatores, "simb_mais");
     addStr(smaisfatores, "simb_menos");
     addStr(smaisfatores, "simb_ponto_virgula");
@@ -365,7 +389,7 @@ void initPrimeirosESeguidores()
     addStr(smaisfatores, "simb_fecha_parenteses");
     addStr(smaisfatores, "then");
 
-    sopmul = criaConjunto(3);
+    sopmul = criaConjunto(5);
     addStr(sopmul, "identificador");
     addStr(sopmul, "identificador mal formado");
 
@@ -373,7 +397,7 @@ void initPrimeirosESeguidores()
     addStr(sopmul, "n_inteiro");
     addStr(sopmul, "simb_abre_parenteses");
 
-    sfator = criaConjunto(3);
+    sfator = criaConjunto(14);
     addStr(sfator, "simb_mult");   // *
     addStr(sfator, "sim_divider"); // /
     addStr(sfator, "simb_mais");
@@ -389,7 +413,7 @@ void initPrimeirosESeguidores()
     addStr(sfator, "simb_fecha_parenteses");
     addStr(sfator, "then");
 
-    snumero = criaConjunto(3);
+    snumero = criaConjunto(14);
     addStr(snumero, "simb_mult");   // *
     addStr(snumero, "sim_divider"); // /
     addStr(snumero, "simb_mais");
@@ -404,4 +428,71 @@ void initPrimeirosESeguidores()
     addStr(snumero, "simb_menor");
     addStr(snumero, "simb_fecha_parenteses");
     addStr(snumero, "then");
+}
+
+void freePrimeirosESeguidores()
+{
+    freeConjunto(pprograma);
+    freeConjunto(pcorpo);
+    freeConjunto(pdc);
+    freeConjunto(pdcc);
+    freeConjunto(pdcv);
+    freeConjunto(pdcp);
+    freeConjunto(ptipovar);
+    freeConjunto(pvariaveis);
+    freeConjunto(pmaisvar);
+    freeConjunto(pparametros);
+    freeConjunto(plistapar);
+    freeConjunto(pmaispar);
+    freeConjunto(pcorpop);
+    freeConjunto(pdcloc);
+    freeConjunto(plistaarg);
+    freeConjunto(pargumentos);
+    freeConjunto(pmaisident);
+    freeConjunto(ppfalsa);
+    freeConjunto(pcomandos);
+    freeConjunto(pcmd);
+    freeConjunto(pcondicao);
+    freeConjunto(prelacao);
+    freeConjunto(pexpressao);
+    freeConjunto(popun);
+    freeConjunto(poutrostermos);
+    freeConjunto(popad);
+    freeConjunto(ptermo);
+    freeConjunto(pmaisfatores);
+    freeConjunto(popmul);
+    freeConjunto(pfator);
+    freeConjunto(pnumero);
+
+    freeConjunto(sprograma);
+    freeConjunto(scorpo);
+    freeConjunto(sdc);
+    freeConjunto(sdcc);
+    freeConjunto(sdcv);
+    freeConjunto(sdcp);
+    freeConjunto(stipovar);
+    freeConjunto(svariaveis);
+    freeConjunto(smaisvar);
+    freeConjunto(sparametros);
+    freeConjunto(slistapar);
+    freeConjunto(smaispar);
+    freeConjunto(scorpop);
+    freeConjunto(sdcloc);
+    freeConjunto(slistaarg);
+    freeConjunto(sargumentos);
+    freeConjunto(smaisident);
+    freeConjunto(spfalsa);
+    freeConjunto(scomandos);
+    freeConjunto(scmd);
+    freeConjunto(scondicao);
+    freeConjunto(srelacao);
+    freeConjunto(sexpressao);
+    freeConjunto(sopun);
+    freeConjunto(soutrostermos);
+    freeConjunto(sopad);
+    freeConjunto(stermo);
+    freeConjunto(smaisfatores);
+    freeConjunto(sopmul);
+    freeConjunto(sfator);
+    freeConjunto(snumero);
 }

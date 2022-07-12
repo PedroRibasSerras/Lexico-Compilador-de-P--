@@ -63,6 +63,7 @@ int main()
     }
     fclose(saida);
     fclose(arquivo);
+    freePrimeirosESeguidores();
 
     for (int i = 0; i < 0; i++)
     {

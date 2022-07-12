@@ -78,7 +78,9 @@ Conjunto *snumero;
 Conjunto *juntaConjuntos(Conjunto *, Conjunto *);
 void printaConjunto(Conjunto *);
 Conjunto *criaConjunto(int);
+void freeConjunto(Conjunto *);
 void addStr(Conjunto *, char *);
 void initPrimeirosESeguidores();
+void freePrimeirosESeguidores();
 
 #endif

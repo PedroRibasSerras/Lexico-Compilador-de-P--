@@ -1,9 +1,5 @@
-program du;
-var a: rel;
-var b: integer;
-procedure nomep(x: real);
-var a, c: integer;
+program meuprograma;
+var a, b: integer;
 begin
-end;
-begin {programa principal}
+    read(a,b);
 end.

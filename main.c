@@ -37,6 +37,8 @@ int main()
     }
     else
     {
+        initPrimeirosESeguidores();
+
         fseek(arquivo, -1, SEEK_CUR);
 
         token = (RetornoLexical *)malloc(1 * sizeof(RetornoLexical));

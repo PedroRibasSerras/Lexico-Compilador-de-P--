@@ -3,6 +3,9 @@
 		"stdio.h": "c",
 		"lexico.h": "c",
 		"sintatico.h": "c",
-		"ostream": "cpp"
+		"ostream": "cpp",
+		"sstream": "cpp",
+		"regex": "cpp",
+		"random": "c"
 	}
 }

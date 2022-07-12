@@ -1,20 +1,10 @@
 #ifndef SINTATICO_H // guardas de cabeçalho, impedem inclusões cíclicas
 #define SINTATICO_H
 #include <stdio.h>
+#include "sp.h"
 
-typedef struct
-{
-    char **v;
-    int n;
-    int p;
-} Conjunto;
-
-Conjunto *juntaConjuntos(Conjunto *, Conjunto *);
-Conjunto *criaConjunto(int);
-void printaConjunto(Conjunto *);
-void addStr(Conjunto *, char *);
 void printErro(char *);
-int erro(char *, Conjunto *);
+int erro(char *, Conjunto *, Conjunto *);
 void programa(Conjunto *);
 void corpo(Conjunto *);
 void dc(Conjunto *);

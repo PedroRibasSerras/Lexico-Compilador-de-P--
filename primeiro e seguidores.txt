@@ -54,15 +54,15 @@
     cmd = seguidores(pfalsa) + { ; } + primeiros(pfalsa) = { ;, else }
     condicao = { ), then }
     relacao = primeiros(expressao) = { +, -, identificador, numero_int, numero_real, ( }
-    expressao = seguidores(cmd), primeiros(relacao), seguidores(condicao), ) = { ;, else, = , <>, >=, <=, >, <, ), then }
+    *expressao = seguidores(cmd), primeiros(relacao), seguidores(condicao), ) = { ;, else, = , <>, >=, <=, >, <, ), then, to, do }
     op_un = primeiros(fator) = { identificador, numero_int, numero_real, ( }
-    outros_termos = seguidores(expressao) = { ;, else, =, <>, >=, <=, >, <, ), then }
+    *outros_termos = seguidores(expressao) = { ;, else, =, <>, >=, <=, >, <, ), then,to, do }
     op_ad = primeiros(termo) = { +, -, identificador, numero_int, numero_real, ( }
-    termo = primeiros(outros_termos),seguidores(outros_termos), seguidores(expressao) = { +, -, ;, else, =, <>, >=, <=, >, <, ), then }
-    mais_fatores = seguidores(termo) = { +, -, ;, else, =, <>, >=, <=, >, <, ), then }
+    *termo = primeiros(outros_termos),seguidores(outros_termos), seguidores(expressao) = { +, -, ;, else, =, <>, >=, <=, >, <, ), then,to, do }
+    *mais_fatores = seguidores(termo) = { +, -, ;, else, =, <>, >=, <=, >, <, ), then, to, do }
     op_mul = primeiros(fator) = { identificador, numero_int, numero_real, ( }
-    fator = primeiros(mais_fatores), seguidores(termo),seguidores(mais_fatores) = { *, /, +, -, ;, else, =, <>, >=, <=, >, <, ), then }
-    numero = ;, seguidores(fator) = { *, /, +, -, ;, else, =, <>, >=, <=, >, <, ), then }
+    *fator = primeiros(mais_fatores), seguidores(termo),seguidores(mais_fatores) = { *, /, +, -, ;, else, =, <>, >=, <=, >, <, ), then, to, do }
+    *numero = ;, seguidores(fator) = { *, /, +, -, ;, else, =, <>, >=, <=, >, <, ), then, to, do }
 
 
 

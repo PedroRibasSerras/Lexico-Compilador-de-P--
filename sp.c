@@ -303,7 +303,7 @@ void initPrimeirosESeguidores()
     addStr(srelacao, "n_inteiro");
     addStr(srelacao, "simb_abre_parenteses");
 
-    sexpressao = criaConjunto(10);
+    sexpressao = criaConjunto(12);
     addStr(sexpressao, "simb_ponto_virgula");
     addStr(sexpressao, "else");
     addStr(sexpressao, "simb_igual");
@@ -314,6 +314,8 @@ void initPrimeirosESeguidores()
     addStr(sexpressao, "simb_menor");
     addStr(sexpressao, "simb_fecha_parenteses");
     addStr(sexpressao, "then");
+    addStr(sexpressao, "to");
+    addStr(sexpressao, "do");
 
     sopun = criaConjunto(5);
     addStr(sopun, "identificador");
@@ -323,7 +325,7 @@ void initPrimeirosESeguidores()
     addStr(sopun, "n_inteiro");
     addStr(sopun, "simb_abre_parenteses");
 
-    soutrostermos = criaConjunto(10);
+    soutrostermos = criaConjunto(12);
     addStr(soutrostermos, "simb_ponto_virgula");
     addStr(soutrostermos, "else");
     addStr(soutrostermos, "simb_igual");
@@ -334,6 +336,8 @@ void initPrimeirosESeguidores()
     addStr(soutrostermos, "simb_menor");
     addStr(soutrostermos, "simb_fecha_parenteses");
     addStr(soutrostermos, "then");
+    addStr(soutrostermos, "to");
+    addStr(soutrostermos, "do");
 
     sopad = criaConjunto(7);
     addStr(sopad, "simb_mais");
@@ -346,7 +350,7 @@ void initPrimeirosESeguidores()
     addStr(sopad, "n_inteiro");
     addStr(sopad, "simb_abre_parenteses");
 
-    stermo = criaConjunto(12);
+    stermo = criaConjunto(14);
     addStr(stermo, "simb_mais");
     addStr(stermo, "simb_menos");
     addStr(stermo, "simb_ponto_virgula");
@@ -359,8 +363,10 @@ void initPrimeirosESeguidores()
     addStr(stermo, "simb_menor");
     addStr(stermo, "simb_fecha_parenteses");
     addStr(stermo, "then");
+    addStr(stermo, "to");
+    addStr(stermo, "do");
 
-    smaisfatores = criaConjunto(12);
+    smaisfatores = criaConjunto(14);
     addStr(smaisfatores, "simb_mais");
     addStr(smaisfatores, "simb_menos");
     addStr(smaisfatores, "simb_ponto_virgula");
@@ -373,6 +379,8 @@ void initPrimeirosESeguidores()
     addStr(smaisfatores, "simb_menor");
     addStr(smaisfatores, "simb_fecha_parenteses");
     addStr(smaisfatores, "then");
+    addStr(smaisfatores, "to");
+    addStr(smaisfatores, "do");
 
     sopmul = criaConjunto(5);
     addStr(sopmul, "identificador");
@@ -382,7 +390,7 @@ void initPrimeirosESeguidores()
     addStr(sopmul, "n_inteiro");
     addStr(sopmul, "simb_abre_parenteses");
 
-    sfator = criaConjunto(14);
+    sfator = criaConjunto(16);
     addStr(sfator, "simb_mult");   // *
     addStr(sfator, "sim_divider"); // /
     addStr(sfator, "simb_mais");
@@ -397,8 +405,10 @@ void initPrimeirosESeguidores()
     addStr(sfator, "simb_menor");
     addStr(sfator, "simb_fecha_parenteses");
     addStr(sfator, "then");
+    addStr(sfator, "to");
+    addStr(sfator, "do");
 
-    snumero = criaConjunto(14);
+    snumero = criaConjunto(16);
     addStr(snumero, "simb_mult");   // *
     addStr(snumero, "sim_divider"); // /
     addStr(snumero, "simb_mais");
@@ -413,6 +423,8 @@ void initPrimeirosESeguidores()
     addStr(snumero, "simb_menor");
     addStr(snumero, "simb_fecha_parenteses");
     addStr(snumero, "then");
+    addStr(snumero, "to");
+    addStr(snumero, "do");
 }
 
 void freePrimeirosESeguidores()

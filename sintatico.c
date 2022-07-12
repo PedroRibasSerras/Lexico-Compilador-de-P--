@@ -10,12 +10,14 @@ Conjunto *juntaConjuntos(Conjunto *c1, Conjunto *c2)
     novoConjunto->v = (char **)malloc((c1->n + c2->n) * sizeof(char *));
     for (int i = 0; i <= c1->p; i++)
     {
-        novoConjunto->v[i] = (char *)malloc(sizeof(c1->v[i]));
+        novoConjunto->v[i] = (char *)malloc(strlen(c1->v[i]) + 1); // era sizeof(c1->v[i]), mas estava dando errado por algum motivo maluco
         strcpy(novoConjunto->v[i], c1->v[i]);
     }
     for (int i = 0; i <= c2->p; i++)
     {
-        novoConjunto->v[c1->p + 1 + i] = (char *)malloc(sizeof(c2->v[i]));
+        printf("%d", sizeof(c2->v[i]));
+        novoConjunto->v[c1->p + 1 + i] = (char *)malloc(strlen(c2->v[i]) + 1); // era sizeof(c1->v[i]), mas estava dando errado por algum motivo maluco
+        // printf("%s", c2->v[i]);
         strcpy(novoConjunto->v[c1->p + 1 + i], c2->v[i]);
     }
     novoConjunto->n = c1->n + c2->n;
@@ -196,6 +198,8 @@ void dc(Conjunto *S)
     addStr(seguidorDcc, "procedure");
     // addStr(seguidorDcc, "begin"); não é necessário pq já existe no S
 
+    printaConjunto(seguidorDcc);
+    printaConjunto(S);
     dc_c(juntaConjuntos(seguidorDcc, S));
 
     Conjunto *seguidorDcv = criaConjunto(1);
@@ -208,6 +212,7 @@ void dc(Conjunto *S)
 
 void dc_c(Conjunto *S)
 {
+
     if (strcmp(token->classe, "const") == 0)
     {
         *token = analiseLexical();
@@ -291,7 +296,7 @@ void dc_c(Conjunto *S)
         Conjunto *proximo = criaConjunto(1);
         addStr(proximo, "const");
 
-        if (!erro("Token \"=\" esperado.", proximo))
+        if (!erro("Token \";\" esperado.", proximo))
             if (erro("", S))
             {
                 return;
@@ -303,21 +308,261 @@ void dc_c(Conjunto *S)
 
 void dc_v(Conjunto *S)
 {
+    if (strcmp(token->classe, "var") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(2); // primeiro de variaveis
+        addStr(proximo, "identificador");
+        addStr(proximo, "identificador mal formado");
+
+        if (!erro("", proximo)) // caso seja lambda não deve dar erro
+        {
+            if (erro("", S))
+            {
+                return;
+            }
+        }
+        else
+        {
+            printErro("Token \"var\" esperado.");
+        }
+    }
+
+    Conjunto *seguidorVariaveis = criaConjunto(2);
+    addStr(seguidorVariaveis, "simb_dois_pontos");
+    addStr(seguidorVariaveis, "simb_fecha_parenteses");
+    // addStr(seguidorDcc, "begin"); não é necessário pq já existe no S
+
+    variaveis(juntaConjuntos(seguidorVariaveis, S));
+
+    if (strcmp(token->classe, "simb_dois_pontos") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(2); // primeiros tipo_var
+        addStr(proximo, "integer");
+        addStr(proximo, "real");
+
+        if (!erro("Token \":\" esperado.", proximo))
+            if (erro("", S))
+            {
+                return;
+            }
+    }
+
+    Conjunto *seguidorTipo_var = criaConjunto(2);
+    addStr(seguidorTipo_var, "simb_dois_pontos");
+    addStr(seguidorTipo_var, "simb_fecha_parenteses");
+
+    tipo_var(juntaConjuntos(seguidorTipo_var, S));
+
+    if (strcmp(token->classe, "simb_ponto_virgula") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(1);
+        addStr(proximo, "var");
+
+        if (!erro("Token \";\" esperado.", proximo))
+            if (erro("", S))
+            {
+                return;
+            }
+    }
+
+    dc_v(S);
 }
 void tipo_var(Conjunto *S)
 {
+    if (strcmp(token->classe, "real") == 0 || strcmp(token->classe, "integer") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+
+        if (erro("Tipo da variável esperado.", S))
+        {
+            return;
+        }
+    }
 }
 
-void vaiaveis(Conjunto *S)
+void variaveis(Conjunto *S)
 {
+    if (strcmp(token->classe, "identificador") == 0 || strcmp(token->classe, "identificador mal formado") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(1);
+        addStr(proximo, "simb_virgula");
+
+        if (!erro("Identificador esperado.", proximo)) //"Token \"=\" esperado."
+            if (erro("", S))
+            {
+                return;
+            }
+    }
+
+    Conjunto *seguidorMais_var = criaConjunto(2); // :, )
+    addStr(seguidorMais_var, "simb_dois_pontos");
+    addStr(seguidorMais_var, "simb_fecha_parenteses");
+
+    mais_var(juntaConjuntos(seguidorMais_var, S));
 }
 
 void mais_var(Conjunto *S)
 {
-}
-void dc_p(Conjunto *S) {}
+    if (strcmp(token->classe, "simb_virgula") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(2); // primeiro de variaveis
+        addStr(proximo, "identificador");
+        addStr(proximo, "identificador mal formado");
 
-void parametros(Conjunto *S) {}
+        if (!erro("", proximo))
+        { //"Token \"=\" esperado."
+            if (erro("", S))
+            {
+                return;
+            }
+        }
+        else
+        {
+            printErro("Token \",\" esperado.");
+        }
+    }
+
+    // Como mais_variaveis só existe dentro de variaveis, não é apenas necessário passar os seguidores dos pais que já incluem.
+    variaveis(S);
+}
+void dc_p(Conjunto *S)
+{
+    if (strcmp(token->classe, "procedure") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(2);
+        addStr(proximo, "identificador");
+        addStr(proximo, "identificador mal formado");
+
+        if (!erro("", proximo)) // caso seja lambda não deve dar erro
+        {
+            if (erro("", S))
+            {
+                return;
+            }
+        }
+        else
+        {
+            printErro("Token \"procedure\" esperado.");
+        }
+    }
+
+    if (strcmp(token->classe, "identificador") == 0 || strcmp(token->classe, "identificador mal formado") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(1); // primeiros de parametros = { (, _ }
+        addStr(proximo, "simb_abre_parenteses");
+        // addStr(proximo, "simb_ponto_virgula");
+
+        if (!erro("Identificador esperado.", proximo)) //"Token \"=\" esperado."
+            if (erro("", S))
+            {
+                return;
+            }
+    }
+
+    Conjunto *seguidorParametros = criaConjunto(1);
+    addStr(seguidorParametros, "simb_ponto_virgula");
+
+    parametros(juntaConjuntos(seguidorParametros, S));
+
+    if (strcmp(token->classe, "simb_ponto_virgula") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(2); // primeiros corpo_p = {var, begin}
+        addStr(proximo, "var");
+        addStr(proximo, "begin");
+
+        if (!erro("Token \";\" esperado.", proximo))
+            if (erro("", S))
+            {
+                return;
+            }
+    }
+
+    Conjunto *seguidorCorpo_p = criaConjunto(2);
+    addStr(seguidorCorpo_p, "procedure");
+    addStr(seguidorCorpo_p, "begin");
+
+    corpo_p(juntaConjuntos(seguidorCorpo_p, S));
+
+    dc_p(S);
+}
+
+void parametros(Conjunto *S)
+{
+    if (strcmp(token->classe, "simb_abre_parenteses") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        Conjunto *proximo = criaConjunto(1); // primeiro de lista_par
+        addStr(proximo, "identificador");
+        addStr(proximo, "identificador mal formado");
+
+        if (!erro("", proximo))
+        { //"Token \"=\" esperado."
+            if (erro("", S))
+            {
+                return;
+            }
+        }
+        else
+        {
+            printErro("Token \"(\" esperado.");
+        }
+    }
+
+    Conjunto *seguidorLista_par = criaConjunto(1);
+    addStr(seguidorLista_par, "simb_fecha_parenteses");
+
+    lista_par(juntaConjuntos(seguidorLista_par, S));
+
+    if (strcmp(token->classe, "simb_fecha_parenteses") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        if (erro("Token \")\" esperado.", S))
+        {
+            return;
+        }
+    }
+}
 
 void lista_par(Conjunto *S) {}
 

@@ -691,7 +691,7 @@ void cmd(Conjunto *S)
     {
         *token = analiseLexical();
 
-        if (strcmp(token->classe, "simb_simb_atrib") == 0)
+        if (strcmp(token->classe, "simb_atrib") == 0)
         {
 
             *token = analiseLexical();

@@ -48,7 +48,10 @@ int main()
 
         programa(criaConjunto(0));
 
-        if (getc(arquivo) != EOF)
+        char final = getc(arquivo);
+        while (final == '\n' || final == '\t' || final == ' ')
+            final = getc(arquivo);
+        if (final != EOF)
         {
             sprintf(inicioErroMsg, "Erro sintatico na linha %d: ", *contadorLinha);
             fputs(inicioErroMsg, saida);

@@ -49,6 +49,19 @@ int erro(char *erroMsg, Conjunto *cd, Conjunto *cp) // 0 - seguidor direto, 1 - 
     return 2;
 }
 
+int tokenExisteNoConjunto(Conjunto *c) // 0 - não exite, 1 - existe
+{
+
+    for (int i = 0; i <= c->p; i++)
+    {
+        if (strcmp(token->classe, c->v[i]) == 0)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 void programa(Conjunto *S)
 {
     if (strcmp(token->classe, "program") == 0)
@@ -531,7 +544,7 @@ void mais_ident(Conjunto *S)
         }
         else if (erroRes == 0)
         {
-            printErro("Token \";\" esperado.@23");
+            printErro("Token \";\" esperado.@30");
         }
     }
 
@@ -555,7 +568,7 @@ void pfalsa(Conjunto *S)
         }
         else if (erroRes == 0)
         {
-            printErro("Token \"else\" esperado.@23");
+            printErro("Token \"else\" esperado.@31");
         }
     }
 
@@ -563,28 +576,34 @@ void pfalsa(Conjunto *S)
     cmd(juntaConjuntos(scmd, S));
 }
 
-void comandos(Conjunto *S) {}
+void comandos(Conjunto *S)
+{
+    if (tokenExisteNoConjunto(pcmd) || !tokenExisteNoConjunto(S))
+    {
+        cmd(juntaConjuntos(scmd, S));
 
+        if (strcmp(token->classe, "simb_ponto_virgula") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+            if (erro("Identificador esperado.@32", pcomandos, S) == 1) //"Token \"=\" esperado."
+                return;
+        }
+
+        comandos(juntaConjuntos(scomandos, S));
+    }
+}
 void cmd(Conjunto *S) {}
-
 void condicao(Conjunto *S) {}
-
 void relacao(Conjunto *S) {}
-
 void expressao(Conjunto *S) {}
-
 void op_un(Conjunto *S) {}
-
 void outros_termos(Conjunto *S) {}
-
 void op_ad(Conjunto *S) {}
-
 void termo(Conjunto *S) {}
-
 void mais_fatores(Conjunto *S) {}
-
 void op_mul(Conjunto *S) {}
-
 void fator(Conjunto *S) {}
-
 void numero(Conjunto *S) {}

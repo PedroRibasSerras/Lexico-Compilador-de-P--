@@ -5,6 +5,7 @@
 
 void printErro(char *);
 int erro(char *, Conjunto *, Conjunto *);
+int tokenExisteNoConjunto(Conjunto *);
 void programa(Conjunto *);
 void corpo(Conjunto *);
 void dc(Conjunto *);

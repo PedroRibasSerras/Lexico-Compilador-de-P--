@@ -595,15 +595,315 @@ void comandos(Conjunto *S)
         comandos(juntaConjuntos(scomandos, S));
     }
 }
-void cmd(Conjunto *S) {}
-void condicao(Conjunto *S) {}
-void relacao(Conjunto *S) {}
-void expressao(Conjunto *S) {}
-void op_un(Conjunto *S) {}
-void outros_termos(Conjunto *S) {}
-void op_ad(Conjunto *S) {}
-void termo(Conjunto *S) {}
-void mais_fatores(Conjunto *S) {}
-void op_mul(Conjunto *S) {}
-void fator(Conjunto *S) {}
-void numero(Conjunto *S) {}
+void cmd(Conjunto *S)
+{
+
+    if (strcmp(token->classe, "read") == 0 || strcmp(token->classe, "write") == 0)
+    {
+        *token = analiseLexical();
+
+        if (strcmp(token->classe, "simb_abre_parenteses") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+            if (erro("Token \"(\" esperado.@33", pvariaveis, S) == 1) //"Token \"=\" esperado."
+                return;
+        }
+
+        variaveis(juntaConjuntos(svariaveis, S));
+
+        if (strcmp(token->classe, "simb_fecha_parenteses") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+            erro("Token \")\" esperado.@34", criaConjunto(0), S);
+        }
+    }
+    else if (strcmp(token->classe, "while") == 0)
+    {
+        *token = analiseLexical();
+
+        if (strcmp(token->classe, "simb_abre_parenteses") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+            if (erro("Token \"(\" esperado.@35", pcondicao, S) == 1) //"Token \"=\" esperado."
+                return;
+        }
+
+        condicao(juntaConjuntos(scondicao, S));
+
+        if (strcmp(token->classe, "simb_fecha_parenteses") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+            Conjunto *proximo = criaConjunto(1);
+            addStr(proximo, "do");
+
+            if (erro("Token \")\" esperado.@36", proximo, S) == 1)
+                return;
+        }
+
+        if (strcmp(token->classe, "do") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+            if (erro("Token \"do\" era esperado.@50", pcmd, S) == 1) //"Token \"=\" esperado."
+                return;
+        }
+
+        cmd(juntaConjuntos(scmd, S));
+    }
+    else if (strcmp(token->classe, "if") == 0)
+    {
+        *token = analiseLexical();
+
+        condicao(juntaConjuntos(scondicao, S));
+
+        if (strcmp(token->classe, "then") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+            if (erro("Token \"then\" esperado.@37", pcmd, S) == 1) //"Token \"=\" esperado."
+                return;
+        }
+
+        cmd(juntaConjuntos(scmd, S));
+
+        pfalsa(juntaConjuntos(spfalsa, S));
+    }
+    else if (strcmp(token->classe, "identificador") == 0)
+    {
+        *token = analiseLexical();
+
+        if (strcmp(token->classe, "simb_simb_atrib") == 0)
+        {
+
+            *token = analiseLexical();
+
+            expressao(juntaConjuntos(sexpressao, S));
+        }
+        else if (tokenExisteNoConjunto(plistaarg))
+        {
+
+            lista_arg(juntaConjuntos(slistaarg, S));
+        }
+        else
+        {
+            erro("Token \":=\" ou \"(\" esperado.@38", criaConjunto(0), S);
+        }
+    }
+    else if (strcmp(token->classe, "begin") == 0)
+    {
+        *token = analiseLexical();
+
+        comandos(juntaConjuntos(scomandos, S));
+
+        if (strcmp(token->classe, "end") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+            erro("Token \"end\" esperado.@38", criaConjunto(0), S);
+        }
+    }
+    else if (strcmp(token->classe, "for") == 0)
+    {
+        *token = analiseLexical();
+
+        if (strcmp(token->classe, "identificador") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+            Conjunto *proximo = criaConjunto(1);
+            addStr(proximo, "simb_atrib");
+
+            if (erro("Identificador esperado.@46", proximo, S) == 1) //"Token \"=\" esperado."
+                return;
+        }
+
+        if (strcmp(token->classe, "simb_atrib") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+
+            if (erro("Token \":=\" era esperado.@47", pexpressao, S) == 1) //"Token \"=\" esperado."
+                return;
+        }
+
+        expressao(juntaConjuntos(sexpressao, S));
+
+        if (strcmp(token->classe, "to") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+
+            if (erro("Token \"to\" era esperado.@48", pexpressao, S) == 1) //"Token \"=\" esperado."
+                return;
+        }
+
+        expressao(juntaConjuntos(sexpressao, S));
+
+        if (strcmp(token->classe, "do") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+
+            if (erro("Token \"do\" era esperado.@49", pcmd, S) == 1) //"Token \"=\" esperado."
+                return;
+        }
+
+        cmd(juntaConjuntos(scmd, S));
+    }
+    else
+    {
+        erro("Um dos seguintes comandos era esprado: read, write, while, if, begin, for. Tambem seria possivel uma atribuicao ou chamada de funcao.@39", criaConjunto(0), S);
+    }
+}
+void condicao(Conjunto *S)
+{
+    expressao(juntaConjuntos(sexpressao, S));
+
+    relacao(juntaConjuntos(srelacao, S));
+
+    expressao(juntaConjuntos(sexpressao, S));
+}
+void relacao(Conjunto *S)
+{
+    if (tokenExisteNoConjunto(prelacao))
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        erro("Um dos seguintes tokens esprado: =, <>, >=, <=, >, <.@40", criaConjunto(0), S);
+    }
+}
+void expressao(Conjunto *S)
+{
+    termo(juntaConjuntos(stermo, S));
+
+    outros_termos(juntaConjuntos(soutrostermos, S));
+}
+void op_un(Conjunto *S)
+{
+    if (tokenExisteNoConjunto(popun))
+    {
+        *token = analiseLexical();
+    }
+}
+void outros_termos(Conjunto *S)
+{
+    if (tokenExisteNoConjunto(popad))
+    {
+        *token = analiseLexical();
+
+        termo(juntaConjuntos(stermo, S));
+
+        outros_termos(juntaConjuntos(soutrostermos, S));
+    }
+}
+void op_ad(Conjunto *S)
+{
+    if (tokenExisteNoConjunto(popad))
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        erro("Um dos seguintes tokens era esprado: +, -.@41", criaConjunto(0), S);
+    }
+}
+void termo(Conjunto *S)
+{
+    op_un(juntaConjuntos(sopun, S));
+
+    fator(juntaConjuntos(sfator, S));
+
+    mais_fatores(juntaConjuntos(smaisfatores, S));
+}
+void mais_fatores(Conjunto *S)
+{
+    if (tokenExisteNoConjunto(popmul))
+    {
+
+        op_mul(juntaConjuntos(sopmul, S));
+
+        fator(juntaConjuntos(sfator, S));
+
+        mais_fatores(juntaConjuntos(smaisfatores, S));
+    }
+}
+void op_mul(Conjunto *S)
+{
+    if (tokenExisteNoConjunto(popmul))
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        erro("Um dos seguintes tokens era esprado: *, /.@42", criaConjunto(0), S);
+    }
+}
+void fator(Conjunto *S)
+{
+    if (strcmp(token->classe, "identificador") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else if (tokenExisteNoConjunto(pnumero))
+    {
+        numero(juntaConjuntos(snumero, S));
+    }
+    else if (strcmp(token->classe, "simb_abre_parenteses") == 0)
+    {
+        *token = analiseLexical();
+
+        expressao(juntaConjuntos(sexpressao, S));
+
+        if (strcmp(token->classe, "simb_fecha_parenteses") == 0)
+        {
+            *token = analiseLexical();
+        }
+        else
+        {
+            erro("Token \")\" esperado.@43", criaConjunto(0), S);
+        }
+    }
+    else
+    {
+        erro("Era esperado um numero,\"(\" ou um numero.@44", criaConjunto(0), S);
+    }
+}
+void numero(Conjunto *S)
+{
+    if (tokenExisteNoConjunto(pnumero))
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        erro("Era esperado um numero.@45", criaConjunto(0), S);
+    }
+}

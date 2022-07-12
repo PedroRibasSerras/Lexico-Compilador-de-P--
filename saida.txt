@@ -1,2 +1,1 @@
-Erro sintatico na linha 2: Tipo da variável esperado.@14
 Programa compilado com sucesso!

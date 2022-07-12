@@ -484,11 +484,11 @@ void lista_arg(Conjunto *S)
         }
         else if (erroRes == 0)
         {
-            printErro("Token \"(\" esperado.@20");
+            printErro("Token \"(\" esperado.@27");
         }
     }
 
-    lista_par(juntaConjuntos(sargumentos, S));
+    argumentos(juntaConjuntos(sargumentos, S));
 
     if (strcmp(token->classe, "simb_fecha_parenteses") == 0)
     {
@@ -496,15 +496,72 @@ void lista_arg(Conjunto *S)
     }
     else
     {
-        erro("Token \")\" esperado.@21", criaConjunto(0), S);
+        erro("Token \")\" esperado.@28", criaConjunto(0), S);
     }
 }
 
-void argumentos(Conjunto *S) {}
+void argumentos(Conjunto *S)
+{
+    if (strcmp(token->classe, "identificador") == 0 || strcmp(token->classe, "identificador mal formado") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+        if (erro("Identificador esperado.@29", pmaisident, S) == 1) //"Token \"=\" esperado."
+            return;
+    }
 
-void mais_ident(Conjunto *S) {}
+    mais_ident(juntaConjuntos(smaisident, S));
+}
 
-void pfalsa(Conjunto *S) {}
+void mais_ident(Conjunto *S)
+{
+    if (strcmp(token->classe, "simb_ponto_virgula") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+
+        int erroRes = erro("", pargumentos, S);
+        if (erroRes == 1) // caso seja lambda não deve dar erro
+        {
+            return;
+        }
+        else if (erroRes == 0)
+        {
+            printErro("Token \";\" esperado.@23");
+        }
+    }
+
+    // Como mais_par só existe dentro de lista_par, é apenas necessário passar os seguidores dos pais que já incluem o de lista_par.
+    argumentos(juntaConjuntos(sargumentos, S));
+}
+
+void pfalsa(Conjunto *S)
+{
+    if (strcmp(token->classe, "else") == 0)
+    {
+        *token = analiseLexical();
+    }
+    else
+    {
+
+        int erroRes = erro("", pcmd, S);
+        if (erroRes == 1) // caso seja lambda não deve dar erro
+        {
+            return;
+        }
+        else if (erroRes == 0)
+        {
+            printErro("Token \"else\" esperado.@23");
+        }
+    }
+
+    // Como mais_par só existe dentro de lista_par, é apenas necessário passar os seguidores dos pais que já incluem o de lista_par.
+    cmd(juntaConjuntos(scmd, S));
+}
 
 void comandos(Conjunto *S) {}
 
